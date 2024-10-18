@@ -1,0 +1,46 @@
+#Leetcode 75
+Sort colors 
+
+Brute force : O(nlogn)
+  ->you can sort the colors using the Arrays.sort
+
+HashMap approach: O(n) with extra space will be to use set.
+  -> Count the number of 0,1, and 2 and then print it
+#Java Code
+ HashMap<Integer,Integer> colors = new HashMap<>();
+                int red = 0, white = 0;
+                for (int i:nums)colors.put(i,colors.getOrDefault(i,0)+1);
+                if (colors.containsKey(0)) red=colors.get(0);
+                if (colors.containsKey(1)) white=colors.get(1);
+                for (int i = 0; i<red;i++)nums[i]=0;
+                for (int i =red;i<red+white;i++)nums[i]=1;
+                for (int i = red+white; i < nums.length; i++)nums[i]=2;
+    }
+
+Optimal Approach : O(n)
+  ->the low value will collect all 0 , mid will collect all 1 and high will collect all 2 [low=0,mid=1,high=2]
+  ->we check the mid does not go above high 
+  ->the mid value is checked if its 0 then swap with low and increase both low and mid
+  ->mid pointer is checked if its 1 then you just move the mid
+  ->mid pointer is checked if its 2 then swapped and high is decreased.
+#Java Code
+public void sortColors(int[] nums) {
+      int low=0,mid=0,high=nums.length-1;
+      while(mid<=high){
+        if(nums[mid]==0){
+            swap(nums,low,mid);
+            low++;mid++;
+
+        }else if(nums[mid]==1){
+            mid++;
+        }else{
+            swap(nums,mid,high);
+            high--;
+        }
+      }
+    }
+    private void swap(int []nums,int i,int j){
+        int temp=nums[i];
+        nums[i]=nums[j];
+        nums[j]=temp;
+    }
