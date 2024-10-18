@@ -1,0 +1,26 @@
+#Leetcode 11
+Container With Most Water
+
+Brute force:O(n^2)
+  ->check the min heights between two points * the width of the particular height
+  ->the greates in the loop is the container with most water.Loop 2 
+
+Optimal Approach:   O(n)
+  ->Going with the concept that Area = height * width    If the height has to increase we should find the height that is maximum.
+                                (inc)    (inc)   (dec)    
+  ->Same approach as the brute force then.
+
+#Java Code
+public int maxArea(int[] height) {
+        if(height==null || height.length==0)return 0;
+        int max=0;
+        int low=0;
+        int high=height.length-1;
+        while(low<high){
+                max=Math.max(max,Math.min(height[low],height[high])*(high-low));
+                if(height[low]<height[high])low++;
+                else high--;
+            
+        }
+        return max;
+    }
