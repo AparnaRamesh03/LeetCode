@@ -1,0 +1,61 @@
+#Leetcode 532
+# https://leetcode.com/problems/k-diff-pairs-in-an-array/description/
+
+Brute Force:O(n * nlogn)
+  ->sort the value and check if two values when added give you the value k and count them
+  ->Edge cases: if two values adjuscent to each other are not the same then go through the loop
+
+Naive Code:  O(n) with space O(n)
+  ->Use a hashmap where you store the value and the index
+  -> storing the index cause if k=0 then while subtracting it or finding compliment it shouldnt take the same value and say.
+For example:if k=0 and [3,1,4,5] then without index it will still give answer as same index value is there
+  ->find the complement of the nums value [3,1,4,1,5]  complement1=3+2==5 in hashmap
+  ->check if in set its there to avoid duplicates and also check if the index is different
+
+#JAVA CODE: 
+public int findPairs(int[] nums, int k) {
+       if(k<0)return 0;
+       HashMap<Integer,Integer>map=new HashMap<>();
+       for(int i=0;i<nums.length;i++){
+        map.put(nums[i],i);
+       }
+       HashSet<Pair<Integer,Integer>>set=new HashSet<>();
+       for(int i=0;i<nums.length;i++){
+        int num=nums[i];
+        int complement1=k+num;
+        if(map.containsKey(complement1) ){
+            Pair<Integer,Integer>result=new Pair<>(num,complement1);
+            if(!set.contains(new Pair<>(complement1,num)) && i!= map.get(complement1)){
+                set.add(result);
+            }
+        }
+       }
+       return set.size();
+    }
+
+
+OPTIMAL CODE:
+  ->Create two hashset seen and unique pair
+  ->check if seen set has num[i]-k val or num[i]+k value 
+      ->if there then add it in unique pair 
+  ->else add the value in seen and iterate.
+
+#JAVA CODE
+public int findPairs(int[] nums, int k) {
+        if (k < 0)
+            return 0;
+        HashSet<Integer> seen = new HashSet<>();
+        HashSet<Integer> uniquePairs = new HashSet<>();
+
+        for (int num : nums) {
+            if (seen.contains(num - k)) {
+                uniquePairs.add(num - k);
+            }
+            if (seen.contains(num + k)) {
+                uniquePairs.add(num);
+            }
+            seen.add(num);
+        }
+
+        return uniquePairs.size();
+    }
