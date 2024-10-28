@@ -1,0 +1,74 @@
+#Leetcode 2501
+# https://leetcode.com/problems/longest-square-streak-in-an-array/description/?envType=daily-question&envId=2024-10-28
+nums = [4,3,6,16,8,2]
+Output: 3
+Explanation: Choose the subsequence [4,16,2]. After sorting it, it becomes [2,4,16].
+- 4 = 2 * 2.
+- 16 = 4 * 4.
+Therefore, [4,16,2] is a square streak.
+It can be shown that every subsequence of length 4 is not a square streak.
+2 3 4 6 8 16
+
+ map if empty -> 16 mp<16,1>
+              ->  4 mp<4,(16,1)+1) -> mp<4,2)
+
+The actual good soln:
+class Solution {
+    public int longestSquareStreak(int[] nums) {
+         Arrays.sort(nums);
+        HashMap<Integer,Integer>hm=new HashMap<>();
+        int max=-1;
+        for(int i=nums.length-1;i>=0;i--)
+        {
+            int ele=nums[i];
+            if(hm.containsKey(ele*ele))
+            {
+                hm.put(ele,hm.get(ele*ele)+1);
+            }
+            else
+            {
+                hm.put(ele,1);
+            }
+            max=Math.max(max,hm.get(ele));
+        }
+        if(max==1)
+        {
+            return -1;
+        }
+        return max;
+
+    }
+}
+
+Brute force which failed and probably wrong::
+class Solution {
+    public int longestSquareStreak(int[] nums) {
+        HashSet<Long>set=new HashSet<>();
+        for(int i=0;i<nums.length;i++){
+            set.add((long)nums[i]);
+        }
+        Arrays.sort(nums);
+        int max=0;
+        for(int i=0;i<nums.length;i++){
+            int count=0;
+            long m=nums[i];
+            while( set.contains(m*m)&& m<=10000){
+                count++;
+                m=m*m;
+                // if (m > Integer.MAX_VALUE) break; 
+            }
+            if (count > 1) {
+                max = Math.max(max, count);
+            }
+            // max=Math.max(max,count);
+        }
+        // System.out.print(max);
+        // if(max<1)return -1;
+        // return max+1;
+        return max >= 2 ? max+1 : -1;
+
+    }
+}
+
+
+
