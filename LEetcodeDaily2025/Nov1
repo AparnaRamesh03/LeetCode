@@ -1,0 +1,39 @@
+Link: https://leetcode.com/problems/delete-nodes-from-linked-list-present-in-array/
+
+Description:
+The problem gives you an array of values called num and a linkedlist.if the linkedlist has any values from the array of values that is the nums then you should remove it from the linked list.
+
+How did I approach the problem:
+-> if the head value has num array then move the head to the next
+-> else just mve one node cur.next=cur.next.next 
+
+Code:
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode modifiedList(int[] nums, ListNode head) {
+        HashSet<Integer>set=new HashSet<>();
+        for(int num:nums){
+            set.add(num);
+        }
+        while(head!=null && set.contains(head.val)){
+            head=head.next;
+        }
+        ListNode curr=head;
+        while(curr!=null && curr.next!=null){
+            while(curr.next!=null && set.contains(curr.next.val)){
+                curr.next=curr.next.next;
+            }
+            curr=curr.next;
+        }
+        return head;
+    }
+}
