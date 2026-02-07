@@ -1,0 +1,36 @@
+https://leetcode.com/problems/valid-parentheses/description/
+
+Problem:
+Give :([]) output:true
+      (()[] output: false
+
+
+Brute force approach:
+  What i can see is just create a for loop and Stack. which will be spaceand time complex more
+
+Good Approach:
+-> Create a Stack
+-> For every ( -> push to stack )  and  { -> } and [ -> ]
+-> if not if it is ) then check if the st.pop== current charcter if not false 
+
+eg: (([))
+(   st-> )
+(   st-> ))
+[   st-> ))]
+)  since st is not empty, st.pop()!=) ]!=) so false
+
+CODE:
+class Solution {
+    public boolean isValid(String s) {
+       Stack<Character>st=new Stack<>();
+       for(int i=0;i<s.length();i++){
+        char ch=s.charAt(i);
+        if(ch=='(')st.push(')');
+            else if(ch=='{')st.push('}');
+            else if(ch=='[')st.push(']');
+            else if(st.isEmpty() || st.pop()!=ch)return false;
+        }
+        return st.isEmpty();
+    }
+}
+            
