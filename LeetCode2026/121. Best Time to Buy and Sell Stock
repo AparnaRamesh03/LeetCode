@@ -12,6 +12,7 @@ Explanation: Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-
 Note that buying on day 2 and selling on day 1 is not allowed because you must buy before you sell.
 
 CLUE: keep checking the MIN AND MAX at each stage.
+----------------------------------------------------------------------------------------------------------------------------------------------------
 
 Solution:
 [7 1 5 3 6 4]
@@ -54,7 +55,7 @@ max profit = 5
 
 
 Buy at 1, sell at 6.
-
+----------------------------------------------------------------------------------------------------------------------------------------------------
 
 Solution:
 class Solution {
