@@ -1,0 +1,61 @@
+https://leetcode.com/problems/flood-fill/description/
+
+Question:
+image = [[1,1,1],[1,1,0],[1,0,1]], sr = 1, sc = 1, color = 2
+
+Output: [[2,2,2],[2,2,0],[2,0,1]]
+
+ 1 1 1      2 2 2 
+ 1 1 0  ->  2 2 0
+ 1 0 1      2 0 1
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+This is a dfs problem.
+You can solve it using recurssion or queue.
+
+Code:
+class Solution {
+    public int[][] floodFill(int[][] image, int sr, int sc, int newcolor) {
+        if(image==null || image.length == 0 || image[sr][sc] == newcolor)return image;
+        int color=image[sr][sc];
+        Queue<int[]>q=new LinkedList<>();
+        q.add(new int[]{sr,sc});
+         image[sr][sc]=newcolor;
+        int dirs[][]={{0,1},{1,0},{0,-1},{-1,0}};
+        while(!q.isEmpty()){
+            int cur[]=q.poll();
+            for(int dir[]:dirs){
+                int r=cur[0]+dir[0];
+                int c=cur[1]+dir[1];
+                if(r>=0 && r<image.length && c>=0 && c<image[0].length && image[r][c]==color){
+                    image[r][c]=newcolor;
+                    q.add(new int[]{r,c});
+                }
+            }
+        }
+        return image;
+    }
+}
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+RECURSSION:
+Always remember to write the end condition for recurssion
+
+class Solution {
+    public int[][] floodFill(int[][] image, int sr, int sc, int newcolor) {
+        if (image[sr][sc] == newcolor)
+            return image;
+        dfs(image, sr, sc, image[sr][sc], newcolor);
+        return image;
+    }
+
+    public void dfs(int[][] image, int i, int j, int color, int newcolor) {
+        if (i < 0 || i >= image.length || j < 0 || j >= image[0].length || image[i][j] != color)
+            return;
+        image[i][j] = newcolor;
+        dfs(image, i + 1, j, color, newcolor);
+        dfs(image, i - 1, j, color, newcolor);
+        dfs(image, i, j + 1, color, newcolor);
+        dfs(image, i, j - 1, color, newcolor);
+    }
+}
