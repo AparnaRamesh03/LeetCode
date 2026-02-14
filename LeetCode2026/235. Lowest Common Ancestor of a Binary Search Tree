@@ -1,0 +1,61 @@
+https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/description/
+
+
+Question:
+Input: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 8
+Output: 6
+              6                  2 & 8 it is 6 
+          2       8              2 & 4 it is 2
+       0    4    7   9           2 & 7 it is 6
+          3   5
+
+---------------------------------------------------------------------------------------------------------------------------------------
+Solution:
+It can be done normally and with recurssion
+
+WITHOUT RECURSSION:
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        int pval=p.val;
+        int qval=q.val;
+        TreeNode node=root;
+        while(node!=null){
+            int parentval=node.val;
+            if(pval<parentval && qval<parentval)node=node.left;
+            else if(pval>parentval && qval>parentval)node=node.right;
+            else return node;
+        }
+        return null;
+    }
+}
+
+
+---------------------------------------------------------------------------------------------------------------------------------------
+WITH RECURSSION:
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if(p.val<root.val && q.val<root.val)return lowestCommonAncestor(root.left,p,q);
+        else if(p.val>root.val && q.val>root.val)return lowestCommonAncestor(root.right,p,q);
+        else return root;
+    }
+}
