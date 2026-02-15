@@ -1,0 +1,81 @@
+https://leetcode.com/problems/linked-list-cycle/description/
+
+EG:
+0-1-2-3-4-5-6-7-|
+      |----------  cycle is 3-4-5-6-7-3
+
+--------------------------------------------------------------------------------------------------------------------------------
+BRUTE FORCE:
+Brute force approach will be to use HashMap or HashSet
+We are storing the pointer value of listnode in the map not the value initself.
+
+Time: O(n)
+Space: O(n) -> Auxillary data structure
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    public boolean hasCycle(ListNode head) {
+        if(head==null)return false;
+        HashSet<ListNode>set=new HashSet<>();
+        while(head.next!=null){
+            if(set.contains(head))return true;
+            set.add(head);
+            head=head.next;
+        }
+        return false;
+
+    }
+}
+--------------------------------------------------------------------------------------------------------------------------------
+SLOW AND FAST POINTER &
+FLOYD algorithm.
+slow by 1 and fast by 2
+
+Time Complexity: O(n)
+Space Complexity: O(1)
+
+    0 - 1 - 2 - 3 - 4 - 5 - 6 - 7
+1.  s       f
+2.      s           f
+3.          s                f
+4. f            s 
+5.          f       s
+6.                  f  s
+7.                        (s&f)
+
+Solution:
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    public boolean hasCycle(ListNode head) {
+        if(head==null || head.next==null)return false;
+        ListNode slow=head;
+        ListNode fast=head;
+        while(fast!=null && fast.next!=null){
+            slow=slow.next;
+            fast=fast.next.next;
+            if(slow==fast)
+                return true;
+
+        }
+        return false;
+    }
+}
