@@ -1,3 +1,3 @@
-Leetcode problems I solve with explanation to it
+Keeping myself accountable to solve problems on a daily basis.
 
-Just explanations to How i understood the problem and how I solved it.
+Explanations to how I solved them with few questions being solved in multiple ways.
