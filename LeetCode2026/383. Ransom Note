@@ -1,0 +1,37 @@
+https://leetcode.com/problems/ransom-note/description/
+
+Question:
+Input: ransomNote = "a", magazine = "b"
+Output: false
+
+if ransomenote is constructed using magazine then true else false;
+
+SOLUTION:
+
+-> add the ransomenote values to the hashmap
+-> check with magazine if the values match then keep reducing 
+-> if map is 0 it means its true else false;
+
+Time Complexity: O(n)
+Space Complexity: O(k) cause there is only k number of letters.
+
+class Solution {
+    public boolean canConstruct(String ransomNote, String magazine) {
+        HashMap<Character,Integer>map=new HashMap<>();
+        for(int i=0;i<ransomNote.length();i++){
+            char ch=ransomNote.charAt(i);
+            map.put(ch,map.getOrDefault(ch,0)+1);;
+        }
+        for(int i=0;i<magazine.length();i++){
+            char ch=magazine.charAt(i);
+            if(map.containsKey(ch)){
+                map.put(ch,map.getOrDefault(ch,0)-1);;
+                if(map.get(ch)==0)map.remove(ch);
+            }
+        }
+        return map.size()==0?true:false;
+    }
+}
+
+
+
