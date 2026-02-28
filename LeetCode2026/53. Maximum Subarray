@@ -1,0 +1,35 @@
+https://leetcode.com/problems/maximum-subarray/description/
+
+Question:
+Input: nums = [-2,1,-3,4,-1,2,1,-5,4]
+Output: 6
+Explanation: The subarray [4,-1,2,1] has the largest sum 6.
+
+SOLUTION:
+You can do NAIVE approach with O(n2) but the optimal approach is using the localsum global sum which is described
+[-2,1,-3,4,-1,2,1,-5,4]
+Local sum checked addition of continuous elements is better or localsum vs globalsum is better
+
+ localSum         GlobalSum
+    -2                -2
+max(-2+1,1)1       (-2,1)1
+max(1-3,-3)-2      (-2,1)1
+max(-2+4,4)4        (1,4)4
+max(4-1,-1)3        (3,4)4 -> [4,-1]
+max(3+2,2)5        (5,4)5  -> [4,-1,2]
+max(5+1,1)6        (6,5)6  -> [4,-1,2,1]
+max(6-5,-5)1        (6,1)6
+max(1+4,5)5          (6,5)6
+
+[4,-1,2,1]
+
+class Solution {
+    public int maxSubArray(int[] nums) {
+        int localsum=nums[0],globalsum=nums[0];
+        for(int i=1;i<nums.length;i++){
+            localsum=Math.max(localsum+nums[i],nums[i]);
+            globalsum=Math.max(localsum,globalsum);
+        }
+        return globalsum;
+    }
+}
