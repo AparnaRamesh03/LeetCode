@@ -1,0 +1,55 @@
+https://leetcode.com/problems/middle-of-the-linked-list/description/
+
+QUESTION:
+Input: head = [1,2,3,4,5]
+Output: [3,4,5]
+Explanation: The middle node of the list is node 3.
+---------------------------------------------------------------------------------------------------------------------
+NAIVE APPROACH:
+Use an arraylist and insert values
+and output the sizze/2
+TIME COMPLEXITY: O(n)
+SPACE COMPLEXITY: O(n)
+To optimize space we can use pointers.
+SOLUTION:
+---------------------------------------------------------------------------------------------------------------------
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode middleNode(ListNode head) {
+        ArrayList<ListNode>ar=new ArrayList<>();
+        while(head!=null){
+            ar.add(head);
+            head=head.next;
+        }
+        return ar.get(ar.size()/2);
+    }
+}
+---------------------------------------------------------------------------------------------------------------------
+OPTIMAL:
+SLOW and FAST Pointer
+While slow is 1x
+then  fast is 2x => so while fast reaches the end ,slow reached the middle of the element
+
+TIME COMPLEXITY:O(n)
+SPACE COMPLEXITY:O(1)
+
+public ListNode middleNode(ListNode head) {
+    ListNode slow = head;
+    ListNode fast = head;
+    
+    while (fast != null && fast.next != null) {
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+    
+    return slow;
+}
