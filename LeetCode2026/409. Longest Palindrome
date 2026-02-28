@@ -1,0 +1,27 @@
+https://leetcode.com/problems/longest-palindrome/description/
+
+Input: s = "abccccdd"
+Output: 7
+
+SOLUTION:
+----------------------------------------------------------------------------------------------------
+HashSet
+-> Create a HashSet & Count
+-> if value is in hashset then count increment by 2
+-> Time complexity: O(n)
+=> Space Complexity: O(n)
+class Solution {
+    public int longestPalindrome(String s) {
+        if(s.length()==0 || s==null)return 0;
+        HashSet<Character>set=new HashSet<>();
+        int count=0;
+        for(int i=0;i<s.length();i++){
+            char ch=s.charAt(i);
+            if(set.contains(ch)){
+                count+=2;
+                set.remove(ch);
+            }else set.add(ch);
+        }
+        return set.size()==0?count:count+1;
+    }
+}
