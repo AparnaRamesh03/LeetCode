@@ -1,0 +1,81 @@
+https://leetcode.com/problems/binary-tree-right-side-view/description/
+
+QUESTION:
+
+Input: root = [1,2,3,null,5,null,4]
+Output: [1,3,4]
+
+SOLUTION:
+------------------------------------------------------------------------------------------------------------
+Naive approach will be using queue 
+TIME COMPLEXITY: O(n)
+SPACE COMPLEXITY: O(n)
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    List<Integer>list=new ArrayList<>();
+    public List<Integer> rightSideView(TreeNode root) {
+        if(root==null)return list;
+        Queue<TreeNode>q=new LinkedList<>();
+        q.add(root);
+        while(!q.isEmpty()){
+            int size=q.size();
+            for(int i=0;i<size;i++){
+                TreeNode node=q.poll();
+                if(i==0)list.add(node.val);
+                if(node.right!=null)q.add(node.right);
+                if(node.left!=null)q.add(node.left);
+            }
+        }
+        return list;
+    }
+}
+
+----------------------------------------------------------------------------------------------------------------
+Optimal approach:
+TIME COMPLEXITY: O(n)
+SPACE COMPLEXITY: O(log n) vs O(h)
+do the dfs 
+but everytime check the depth and array size() if equal then add to arraylist
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    ArrayList<Integer>ar=new ArrayList<>();
+    public List<Integer> rightSideView(TreeNode root) {
+        rightside(root,0);
+        return ar;
+    }
+    public void rightside(TreeNode root,int depth){
+        if(root==null)return ;
+        if(depth==ar.size())ar.add(root.val);
+       rightside(root.right,depth+1);
+       rightside(root.left,depth+1);
+    }
+}
