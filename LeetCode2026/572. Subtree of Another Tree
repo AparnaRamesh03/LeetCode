@@ -1,0 +1,174 @@
+https://leetcode.com/problems/subtree-of-another-tree/description/
+
+QUESTION:
+Input: root = [3,4,5,1,2], subRoot = [4,1,2]
+Output: true
+
+SOLUTION:
+The optimal approach is serialization which is given after solving two naive approaches.
+------------------------------------------------------------------------------------------------------------------------------------------------
+OPTIMAL APPROACH: Is serialization
+TIME COMPLEXITY: O(n+m)
+SPACE COMPLEXITY: O(n+m)
+
+Approach:
+Serialize then
+root -> (3,(4,(1,N,N),(2,N,N)),(5,N,N))
+Sub Root Value -> (4,(1,N,N),(2,N,N))
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public String serialize(TreeNode root){
+        if(root==null)return "N";
+    }
+    public boolean isSubtree(TreeNode root, TreeNode subRoot) {
+        String rootValue=serialize(root);
+        String subRootValue=serialize(subRoot);
+        return rootValue.contains(subRootValue);
+    }
+}
+------------------------------------------------------------------------------------------------------------------------------------------------
+NAIVE APPROACH:(1)
+TIME COMPLEXITY: O(n*m)
+SPACE COMPLEXITY: O(n)
+
+USING QUEUE (BFS):
+import java.util.*;
+
+class Solution {
+
+    public boolean isSubtree(TreeNode root, TreeNode subRoot) {
+        if (root == null) return false;
+
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+
+        while (!queue.isEmpty()) {
+            TreeNode current = queue.poll();
+
+            // Try matching at this node
+            if (isSameTree(current, subRoot)) {
+                return true;
+            }
+
+            // Add children to queue
+            if (current.left != null)
+                queue.offer(current.left);
+
+            if (current.right != null)
+                queue.offer(current.right);
+        }
+
+        return false;
+    }
+
+    public boolean isSameTree(TreeNode p, TreeNode q) {
+        if (p == null && q == null) return true;
+        if (p == null || q == null) return false;
+        if (p.val != q.val) return false;
+
+        return isSameTree(p.left, q.left) &&
+               isSameTree(p.right, q.right);
+    }
+}
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+NAIVE APPROACH:(2)
+
+TIME COMPLEXITY: O(n*m)
+SPACE COMPLEXITY: O(n)
+We are at:
+p = 3
+q = 4
+🔷isSameTree(3, 4)
+Compare values:
+3 != 4
+So it immediately returns:
+false
+helper(4,4) || helper(5,4)
+🔷Call helper(4,4)
+p = 4
+q = 4
+Check 1: p == null?
+No.
+Check 2: isSameTree(4,4)?
+Call isSameTree.
+🔷isSameTree(4,4)
+4 == 4 → true
+Now check subtrees:
+return isSameTree(p.right,q.right) 
+    && isSameTree(p.left,q.left);
+Compare right children:
+2 == 2 → true
+Both children null → return true.
+Compare left children:
+1 == 1 → true
+Both children null → return true.
+So:
+true && true = true
+isSameTree(4,4) returns:
+true
+🔷Back to helper(4,4)
+Since isSameTree returned true:
+if(isSameTree(p,q)){
+    return true;
+}
+So helper(4,4) returns:
+true
+🔷Back to:
+return helper(p.left,q) || helper(p.right,q);
+Now we have:
+true || helper(5,4)
+Because of short-circuit OR, Java stops immediately.
+helper(5,4) is NOT executed.
+Final result:
+true
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public boolean isSubtree(TreeNode root, TreeNode subRoot) {
+        return helper(root,subRoot);
+    }
+    public boolean helper(TreeNode p,TreeNode q){
+        if (p == null) {
+            return false;
+        }
+        if(isSameTree(p,q)){
+            return true;
+        }
+        return helper(p.left,q) || helper(p.right,q);
+    }
+    public boolean isSameTree(TreeNode p,TreeNode q){
+        if(p==null && q==null)return true;
+        if(p==null || q==null)return false;
+        if(p.val!=q.val)return false;
+        return isSameTree(p.right,q.right) && isSameTree(p.left,q.left);
+    }
+}
