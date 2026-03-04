@@ -1,0 +1,119 @@
+https://leetcode.com/problems/binary-tree-maximum-path-sum/description/
+
+Question:
+Input: root = [-10,9,20,null,null,15,7]
+Output: 42
+Explanation: The optimal path is 15 -> 20 -> 7 with a path sum of 15 + 20 + 7 = 42.
+
+SOLUTION:
+OPTIMAL:
+Time Complexity: O(n)
+Space Complexity: O(h)
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    int ans=Integer.MIN_VALUE;
+    public int maxPathSum(TreeNode root) {
+        helper(root);
+        return ans;
+    }
+    public int helper(TreeNode root){
+        if(root==null)return 0;
+        int left=Math.max(helper(root.left),0);
+        int right=Math.max(helper(root.right),0);
+        int path=root.val+left+right;
+        ans=Math.max(ans,path);
+        return root.val+Math.max(left,right);
+    }
+}
+
+
+Step 1 to Step 4 (Complete Flow Until Node 20)
+🔹 Step 1: Visit Node 9
+
+Left child = null → return 0
+
+Right child = null → return 0
+
+So:
+
+left = 0
+right = 0
+pathSum = 9 + 0 + 0 = 9
+
+Update global:
+
+ans = 9
+
+Return to parent:
+
+return 9
+🔹 Step 2: Visit Node 15
+
+Left = 0
+
+Right = 0
+
+pathSum = 15
+ans = max(9,15) = 15
+
+Return:
+
+15
+🔹 Step 3: Visit Node 7
+
+Left = 0
+
+Right = 0
+
+pathSum = 7
+ans = 15
+
+Return:
+
+7
+🔹 Step 4: Visit Node 20
+
+Now we have values from children:
+
+left = 15
+right = 7
+
+Compute full path through 20:
+
+pathSum = 20 + 15 + 7 = 42
+
+Update global:
+
+ans = max(15,42) = 42
+
+Now IMPORTANT:
+
+We cannot return 42 to parent
+because that path splits into two directions.
+
+So we return only one side:
+
+return 20 + max(15,7)
+= 20 + 15
+= 35
+
+At this point:
+
+ans = 42
+
+And 35 goes upward to -10.
