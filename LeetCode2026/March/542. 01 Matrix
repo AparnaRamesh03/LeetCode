@@ -1,0 +1,46 @@
+https://leetcode.com/problems/01-matrix/description/
+
+Question:
+Input: mat = [[0,0,0],[0,1,0],[1,1,1]]
+Output: [[0,0,0],[0,1,0],[1,2,1]]
+
+Solution:
+Can do in dfs but its not optimal as it goes through each loop
+BFS is the optimal solution and so you choose to add the index of 0th elements.
+
+class Solution {
+    public int[][] updateMatrix(int[][] mat) {
+        Queue<int[]>q=new LinkedList<>();
+        for(int i=0;i<mat.length;i++){
+            for(int j=0;j<mat[0].length;j++){
+                if(mat[i][j]==0){
+                    q.add(new int[]{i,j});
+                }
+            }
+        }
+        int dist=1;
+        int dirs[][]={{0,1},{1,0},{0,-1},{-1,0}};
+        while(!q.isEmpty()){
+            int size=q.size();
+            for(int i=0;i<size;i++){
+                int cur[]=q.poll();
+                for(int dir[]:dirs){
+                    int r=cur[0]+dir[0];
+                    int c=cur[1]+dir[1];
+                    if(r<mat.length && r>=0 && c<mat[0].length && c>=0 && mat[r][c]==1){
+                        mat[r][c]=-dist;
+                        q.add(new int[]{r,c});
+                    } 
+                    
+                }
+            }
+            dist++;
+        }
+        for(int i=0;i<mat.length;i++){
+            for(int j=0;j<mat[0].length;j++){
+                mat[i][j]=-1*mat[i][j];
+            }
+        }
+        return mat;
+    }
+}
