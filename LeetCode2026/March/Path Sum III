@@ -1,0 +1,57 @@
+https://leetcode.com/problems/path-sum-iii/
+
+
+QUESTION:
+Input: root = [10,5,-3,3,2,null,11,3,-2,null,1], targetSum = 8
+Output: 3
+Explanation: The paths that sum to 8 are shown.
+
+
+SOLUTION
+(Maybe not the best way out there )
+TIME COMPLEXITY:O(n)
+SPACE COMPLEXITY:O(n)
+
+
+CODE:
+Since you have solved Path sum 1&2 
+Its the same , just that I create a dfs of each node and go through it.
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    int count=0;
+    public int pathSum(TreeNode root, int targetSum) {
+        dfs(root,targetSum);
+        return count;
+    }
+    public void dfs(TreeNode root,int targetSum){
+        if(root==null)return;
+        findpaths(root,targetSum,0,new ArrayList<>());
+        dfs(root.left,targetSum);
+        dfs(root.right,targetSum);
+    }
+    public void findpaths(TreeNode root,int targetSum,long sum,ArrayList<Integer>list){
+        if(root==null)return;
+        sum+=root.val;
+        list.add(root.val);
+        if(sum==targetSum){
+            count++;
+        }
+        findpaths(root.left,targetSum,sum,list);
+        findpaths(root.right,targetSum,sum,list);
+    }
+}
