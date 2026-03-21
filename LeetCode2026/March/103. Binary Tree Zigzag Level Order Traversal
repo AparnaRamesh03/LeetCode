@@ -1,0 +1,109 @@
+https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/description/
+
+
+QUESTION:
+[5,4,8,11,null,13,4,7,2,null,null,5,1]
+
+Output: [[5],[8,4],[11,13,4],[1,5,2,7]]
+
+SOLUTION: [DEQUEUE SOLUTION ALSO THERE]
+TIME COMPLEXITY: O(n)
+SPACE COMPLEXITY: O(n)
+-------------------------------------------------------------------------------------------------------------------------------
+used a flag to differentiate between where i should reverse and where not to reverse.
+But otherwise its the classic bfs solution with queue.
+-------------------------------------------------------------------------------------------------------------------------------
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    List<List<Integer>>ar=new ArrayList<>();
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        if(root==null)return ar;
+        Queue<TreeNode>q=new LinkedList<>();
+        q.add(root);
+        boolean flag=true;
+        while(!q.isEmpty()){
+            int size=q.size();
+            ArrayList<Integer>list=new ArrayList<>();
+            
+            for(int i=0;i<size;i++){
+                TreeNode node=q.poll();
+                list.add(node.val);
+                if(node.left!=null){
+                    q.add(node.left);
+                }
+                if(node.right!=null){
+                    q.add(node.right);
+                }
+            }
+            if(!flag)Collections.reverse(list);
+            ar.add(list);
+            flag=!flag;
+
+        }
+        return ar;
+    }
+}
+-------------------------------------------------------------------------------------------------------------------------------
+DEQUEUE SOLUTION: Firstly the difference between queue and dequeue is that in dequeue you can insert from both sides.
+
+Just remember addFirst,pollfirst,addLast,pollLast..Figure out how to insert and you are good to go.
+-------------------------------------------------------------------------------------------------------------------------------
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    List<List<Integer>>res=new ArrayList<>();
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        if(root==null)return res;
+        Deque<TreeNode>q=new LinkedList<>();
+        q.addFirst(root);
+        boolean reverse=false;
+        while(!q.isEmpty()){
+            List<Integer>current=new ArrayList<>();
+            int size=q.size();
+            for(int i=0;i<size;i++){
+                if(!reverse){
+                    TreeNode curr=q.pollFirst();
+                    current.add(curr.val);
+                    if(curr.left!=null)q.addLast(curr.left);
+                    if(curr.right!=null)q.addLast(curr.right);
+                }else{
+                    TreeNode curr=q.pollLast();
+                    current.add(curr.val);
+                    if(curr.right!=null)q.addFirst(curr.right);
+                    if(curr.left!=null)q.addFirst(curr.left);
+                }
+                
+            }
+            res.add(current);
+            reverse=!reverse;
+        }
+        return res;
+    }
+}
