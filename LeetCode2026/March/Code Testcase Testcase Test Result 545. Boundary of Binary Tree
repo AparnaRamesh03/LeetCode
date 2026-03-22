@@ -1,0 +1,65 @@
+Question:
+[1,2,3,4,5,6,null,null,null,7,8,9,10]
+OUTPUT:
+[1,2,4,7,8,9,10,6,3]
+
+
+SOLUTION:
+First dfs of left side
+then the leaves
+Then dfs of right side
+
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    List<Integer> ar = new ArrayList<>();
+    public List<Integer> boundaryOfBinaryTree(TreeNode root) {
+        if(root==null)return ar;
+        ar.add(root.val);
+        leftSide(root.left);
+        leaves(root.left);
+        leaves(root.right);
+        rightSide(root.right);
+        return ar;
+    }
+    public void leftSide(TreeNode root){
+        if(root == null || (root.right == null && root.left == null)) return;
+        ar.add(root.val);
+        leftSide(root.left);
+        if(root.left==null)leftSide(root.right);  -----> this condition is if the tree looks like this
+                                                                                        1
+                                                                                    2
+                                                                                        3
+                                                                                    4                                                                                     
+    }
+    public void rightSide(TreeNode root){
+        if(root == null || (root.right == null && root.left == null)) return;
+        
+        rightSide(root.right);
+        if(root.right==null)rightSide(root.left);
+        ar.add(root.val);
+    }
+    public void leaves(TreeNode root){
+        if(root==null)return;
+        if(root.left==null && root.right==null){
+            ar.add(root.val);
+            return;
+        }
+        leaves(root.left);
+        leaves(root.right);
+    }
+}
