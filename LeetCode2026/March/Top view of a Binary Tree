@@ -1,0 +1,66 @@
+https://takeuforward.org/data-structure/top-view-of-a-binary-tree
+
+
+Question:
+Input:Binary Tree: 1 2 3 4 10 9 11 -1 5 -1 -1 -1 -1 -1 -1 -1 6
+Output: [4,2,1,3,11]
+
+SOLUTION:
+Same as boundary with a little tweak.
+-----------------------------------------------------------------------------------------------------------------------------------------------
+Code:
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+        
+public List<Integer> levelorder(TreeNode root) {
+    List<Integer> nodes = new ArrayList<>(1000);
+    if(root == null) return nodes;
+    leftBoundary(root.left,nodes);
+    nodes.add(root.val);
+    rightBoundary(root.right,nodes);
+    return nodes;
+}
+public void leftBoundary(TreeNode root,List<Integer> nodes) {
+    if(root == null) return;
+    leftBoundary(root.left,nodes);
+    nodes.add(root.val);
+}
+public void rightBoundary(TreeNode root,List<Integer> nodes) {
+    if(root == null ) return;
+    nodes.add(root.val);
+    rightBoundary(root.right,nodes);  
+}  }
+-----------------------------------------------------------------------------------------------------------------------------------------------
+Another way to solve:
+
+The first value of all index values
+
+                      1
+                  2        3
+              4      10  9    11
+                5
+                  6
+
+the column value..
+-2 4
+-1 2
+ 0 1
+ 1 3
+ 2 11
+
+
+
+
+
+
+
+
+
