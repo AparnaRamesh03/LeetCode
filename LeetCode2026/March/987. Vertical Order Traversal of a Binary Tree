@@ -1,0 +1,152 @@
+https://leetcode.com/problems/vertical-order-traversal-of-a-binary-tree/description/
+
+
+QUESTION:
+Input: root = [1,2,3,4,5,6,7]
+Output: [[4],[2],[1,5,6],[3],[7]]
+Explanation:
+Column -2: Only node 4 is in this column.
+Column -1: Only node 2 is in this column.
+Column 0: Nodes 1, 5, and 6 are in this column.
+          1 is at the top, so it comes first.
+          5 and 6 are at the same position (2, 0), so we order them by their value, 5 before 6.
+Column 1: Only node 3 is in this column.
+Column 2: Only node 7 is in this column.
+
+SOLUTION: 2 solns
+----------------------------------------------------------------------------------------------------------------------------------------------------
+                      1
+                  2       3
+               4    5  6     7  
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
+DFS APPROACH:
+You have an int[]  in which you save col,row and node val
+dfs
+sort it
+save the values.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public List<List<Integer>> verticalTraversal(TreeNode root) {
+        List<int[]>nodes=new ArrayList<>();
+        dfs(root,0,0,nodes);
+        nodes.sort((a,b)->{
+            if(a[0]!=b[0])return Integer.compare(a[0],b[0]);
+            if(a[1]!=b[1])return Integer.compare(a[1],b[1]);
+            return Integer.compare(a[2],b[2]);
+        });
+        List<List<Integer>>list=new ArrayList<>();
+        int prevCol=Integer.MIN_VALUE;
+        for(int ar[]:nodes){
+            int col=ar[0],val=ar[2];
+            if(col!=prevCol){
+                list.add(new ArrayList<>());
+                prevCol=col;
+            }
+            list.get(list.size()-1).add(val);
+        }
+        return list;
+    }
+    public void dfs(TreeNode root,int row,int col,List<int[]>nodes){
+        if(root==null)return;
+        nodes.add(new int[]{col,row,root.val});
+        dfs(root.left,row+1,col-1,nodes);
+        dfs(root.right,row+1,col+1,nodes);
+    }
+}
+----------------------------------------------------------------------------------------------------------------------------------------------------
+BFS APPROACH:
+This is not the brute force solution.Not the best solution.
+
+1)Create a hashmap that stores the node & index values Eg: 1 -> [0,0] 2->[-1,1] 3->[1,1] 4->[-2,2] 5->[2,0] 6->[2,0] 7->[2,2]
+2)usind bfs approach you do the indexing and add values to the hashmap
+3)Create a second map with the column value which tells the the vertical order -2 -1 0 1 2
+4)Get the node values for each and get the output
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    List<List<Integer>>list=new ArrayList<>();
+    public List<List<Integer>> verticalTraversal(TreeNode root) {
+        HashMap<TreeNode,int[]>map=new HashMap<>();
+        Queue<TreeNode>q=new LinkedList<>();
+        q.add(root);
+        int ar[]={0,0};
+        // ListNode<int[]>val=new ArrayList<>();
+        map.put(root,ar);
+        while(!q.isEmpty()){
+            int size=q.size();
+            for(int i=0;i<size;i++){
+                TreeNode node=q.poll();
+                System.out.print(node.val+" ");
+                int arr[]=map.get(node);
+                System.out.print(arr[0]+" ");
+                System.out.println(arr[1]);
+                int row=arr[0];
+                int col=arr[1];
+                if(node.left!=null){
+                    q.add(node.left);
+                    map.put(node.left,new int[]{row+1,col-1});
+                }
+                if(node.right!=null){
+                    q.add(node.right);
+                    map.put(node.right,new int[]{row+1,col+1});
+                }
+            }
+        }
+        HashMap<Integer,List<Integer>>map1=new HashMap<>();
+
+        for (Map.Entry<TreeNode, int[]> entry : map.entrySet()) {
+            TreeNode node = entry.getKey();
+    int[] arr = entry.getValue();
+    int col = arr[1];
+
+    if (map1.containsKey(col)) {
+        map1.get(col).add(node.val); 
+    } else {
+        List<Integer> val = new ArrayList<>();
+        val.add(node.val);           
+        map1.put(col, val);
+    }
+        }
+      List<Integer> cols = new ArrayList<>(map1.keySet());
+Collections.sort(cols);
+
+for (int col : cols) {
+    list.add(map1.get(col));
+}
+
+return list;
+    }
+} 
