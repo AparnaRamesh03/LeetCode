@@ -1,0 +1,28 @@
+https://leetcode.com/problems/find-peak-element/description/
+
+QUESTION:
+Input: nums = [1,2,1,3,5,6,4]
+Output: 5 (index value)
+
+SOLUTION:
+------------------------------------------------------------------------------------------------------------------------
+1)Find the mid element
+2)if the mid element is at peak then return that
+3)if mid element < mid-1 element then high=mid
+4)else low=mid+1
+
+
+------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public int findPeakElement(int[] nums) {
+        int low=0;
+        int high=nums.length-1;
+        while(low<=high){
+            int mid=low+(high-low)/2;
+            if((mid==0 || nums[mid]>nums[mid-1]) && (mid==nums.length-1 || nums[mid]>nums[mid+1]))return mid;
+            else if(mid>0 && nums[mid]<nums[mid-1])high=mid;
+            else low=mid+1;
+        }
+        return -1;
+    }
+}
