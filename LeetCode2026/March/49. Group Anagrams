@@ -1,0 +1,26 @@
+https://leetcode.com/problems/group-anagrams/description/
+
+QUESTION:
+Input: strs = ["eat","tea","tan","ate","nat","bat"]
+Output: [["bat"],["nat","tan"],["ate","eat","tea"]]
+
+SOLUTION:
+-------------------------------------------------------------------------------------------------------------------------
+Sort the values and save it in hashmap
+-------------------------------------------------------------------------------------------------------------------------
+
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        HashMap<String,List<String>>map=new HashMap<>();
+        for(int i=0;i<strs.length;i++){
+            char ch[]=strs[i].toCharArray();
+            Arrays.sort(ch);
+            String val=String.valueOf(ch);
+            if(!map.containsKey(val)){
+                map.put(val,new ArrayList<>());
+            }
+            map.get(val).add(strs[i]);
+        }
+        return new ArrayList<>(map.values());
+    }
+}
