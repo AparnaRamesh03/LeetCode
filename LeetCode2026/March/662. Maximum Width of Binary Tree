@@ -10,6 +10,8 @@ Output: 2
 
 SOLUTION:
 --------------------------------------------------------------------------------------------------------------------------
+2 solutions: One with hashmap and the other using Pair
+--------------------------------------------------------------------------------------------------------------------------
 REMEMBER: to find the index of a tree left=2i+1 right=2i+2 where i is the index of the root value.
 Eg:
           1
@@ -77,6 +79,67 @@ class Solution {
             System.out.print(first.val);
             System.out.println(last.val);
             int max = Math.abs(map.get(first) - map.get(last));
+            width=Math.max(max,width);
+        }
+        return width+1;
+    }
+}
+
+--------------------------------------------------------------------------------------------------------------------------
+Solve using Object Pair
+
+--------------------------------------------------------------------------------------------------------------------------
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    private class Pair{
+        TreeNode node;
+        int index;
+        Pair(TreeNode node,int index){
+            this.node=node;
+            this.index=index;
+        }
+    }
+    public int widthOfBinaryTree(TreeNode root) {
+        Queue<Pair> q = new LinkedList<>();
+        q.add(new Pair(root,0));
+        int width=0;
+        while (!q.isEmpty()) {
+            int size = q.size();
+            int first=0;
+            int last=0;
+            int mini=q.peek().index;
+            for (int j = 0; j < size; j++) {
+                Pair p = q.poll();
+                TreeNode node=p.node;
+                int i=p.index;
+                if (j == 0)
+                    first = i;
+                if (j == size - 1)
+                    last = i;
+                if (node.left != null) {
+                    q.add(new Pair(node.left,(2 * i) + 1));
+                }
+                if (node.right != null) {
+                     q.add(new Pair(node.right,(2 * i) + 2));
+                }
+            }
+            System.out.print(first);
+            System.out.println(last);
+            int max = Math.abs((first) - (last));
             width=Math.max(max,width);
         }
         return width+1;
