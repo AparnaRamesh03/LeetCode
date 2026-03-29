@@ -1,0 +1,55 @@
+https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/description/
+
+
+Question:
+Input: root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1
+Output: 3
+Explanation: The LCA of nodes 5 and 1 is 3.
+
+Solution:
+TIME COMPLEXITY:O(n), since we traverse each node once
+SPACE COMPLEXITY:O(h), where h is the height of the tree (O(log n) for balanced, O(n) for skewed)
+
+Check for left and right.
+If p and q are in each side.. left!=null && right!=null then it means the root value is the value
+
+root = [3,5,1,6,2,0,8,null,null,7,4], p = 2, q = 8
+Output: 3
+
+                      3
+                  5      1
+              6    2   0   8
+                 7   4
+3 l r
+5 l r
+6 l=null r=null
+5 l=null r=2
+2 
+5 -> 2 if left==null return right statement
+3 l=2 r=?
+1 l r
+0 l=null r=null
+1 l=null r
+8
+1 l=null r=8
+1->8
+3 l=2 r=8 return root
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if(root==null || root==p || root==q)return root;
+        TreeNode left=lowestCommonAncestor(root.left,p,q);
+        TreeNode right=lowestCommonAncestor(root.right,p,q);
+        if(left!=null && right!=null)return root;
+        return left==null?right:left;
+    }
+}
