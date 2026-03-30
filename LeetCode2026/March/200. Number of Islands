@@ -1,0 +1,106 @@
+https://leetcode.com/problems/number-of-islands/description/
+
+
+QUESTION:
+Example 1:
+Input: grid = [
+  ["1","1","1","1","0"],
+  ["1","1","0","1","0"],
+  ["1","1","0","0","0"],
+  ["0","0","0","0","0"]
+]
+Output: 1
+Example 2:
+
+Input: grid = [
+  ["1","1","0","0","0"],
+  ["1","1","0","0","0"],
+  ["0","0","1","0","0"],
+  ["0","0","0","1","1"]
+]
+Output: 3
+
+SOLUTION:
+----------------------------------------------------------------------------------------------------------------------------
+dfs:
+get the values that have 1
+call by recursion,make it 0 once it is processed.
+(i.e)mark the visited nodes as o in the recursive call
+Increase the count.
+TIME COMPLEXITY: O(m*n)
+SPACE COMPLEXITY: O(m*n)
+----------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public int numIslands(char[][] grid) {
+        int count=0;
+        for(int i=0;i<grid.length;i++){
+            for(int j=0;j<grid[0].length;j++){
+                if(grid[i][j]=='1'){
+                    dfs(grid,i,j);
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+    public void dfs(char[][] grid,int i,int j){
+        if(i<0 || i>=grid.length || j<0 || j>=grid[0].length || grid[i][j]=='0')return;
+        int dirs[][]={{0,1},{0,-1},{1,0},{-1,0}};
+        grid[i][j]='0';
+        for(int dir[]:dirs){
+            int r=dir[0]+i;
+            int c=dir[1]+j;
+            dfs(grid,r,c);
+        }
+    }
+}
+--------------------------------------------------------------------------------------------------------------------------------
+BFS SOlution:
+Same but just use Queue.
+--------------------------------------------------------------------------------------------------------------------------------
+
+import java.util.*;
+
+class Solution {
+    public int numIslands(char[][] grid) {
+        int count = 0;
+
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+
+                if (grid[i][j] == '1') {
+                    bfs(grid, i, j);
+                    count++;
+                }
+
+            }
+        }
+        return count;
+    }
+
+    public void bfs(char[][] grid, int i, int j) {
+        Queue<int[]> q = new LinkedList<>();
+        q.offer(new int[]{i, j});
+
+        grid[i][j] = '0'; // mark visited
+
+        int[][] dirs = {{0,1},{0,-1},{1,0},{-1,0}};
+
+        while (!q.isEmpty()) {
+            int[] curr = q.poll();
+
+            for (int[] dir : dirs) {
+                int r = curr[0] + dir[0];
+                int c = curr[1] + dir[1];
+
+                if (r >= 0 && r < grid.length &&
+                    c >= 0 && c < grid[0].length &&
+                    grid[r][c] == '1') {
+
+                    q.offer(new int[]{r, c});
+                    grid[r][c] = '0'; // mark visited
+                }
+            }
+        }
+    }
+}
