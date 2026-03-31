@@ -1,0 +1,43 @@
+https://leetcode.com/problems/search-in-rotated-sorted-array/description/
+
+Questions:
+Example 1:
+
+Input: nums = [4,5,6,7,0,1,2], target = 0
+Output: 4
+Example 2:
+
+Input: nums = [4,5,6,7,0,1,2], target = 3
+Output: -1
+
+SOLUTION:
+---------------------------------------------------------------------------------------------------------
+TIME COMPLEXITY: O(N)
+SPACE COMPLEXITY: O(1)
+
+->check what the mid value is
+-> check if low<mid
+    -> check if target is in between them else low=md+1
+-> else if low>mid
+    -> change
+
+---------------------------------------------------------------------------------------------------------
+CODE:
+class Solution {
+    public int search(int[] nums, int target) {
+        int low=0;
+        int high=nums.length-1;
+        while(low<=high){
+            int mid=low+(high-low)/2;
+            if(target==nums[mid])return mid;
+            if(nums[low]<=nums[mid]){
+                if(target>=nums[low] && target<=nums[mid])high=mid-1;
+                else low=mid+1;
+            }else{
+                if(target<=nums[high] && target>=nums[mid])low=mid+1;
+                else high=mid-1;
+            }
+        }
+        return -1;
+    }
+}
