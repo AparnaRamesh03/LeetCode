@@ -1,0 +1,71 @@
+https://takeuforward.org/data-structure/connected-components
+
+
+QUESTION:
+Input: V=4, edges=[[0,1],[1,2]]
+Output: 2
+Explanation: Vertices {0,1,2} forms the first component and vertex 3 forms the second component.
+
+Input:V = 7, edges = [[0, 1], [1, 2], [2, 3], [4, 5]]
+Output: 3
+Explanation: The edges [0, 1], [1, 2], [2, 3] form a connected component with vertices {0, 1, 2, 3}
+The edge [4, 5] forms another connected component with vertices {4, 5}.
+Therefore, the graph has 3 connected components: {0, 1, 2, 3}, {4, 5}, and the isolated vertices {6}.
+
+SOLUTION:
+------------------------------------------------------------------------------------------------------------------------------
+TIME COMPLEXITY: O(V+E)
+SPACE COMPLEXITY: O(V+E)
+
+Explanation:
+Step 1:
+You create an arraylist that stores the edges from both sides
+Meaning: [0] -> [1]       for [[0,1][1,2]]
+         [1] -> [0,2]
+         [2] -> [1]
+
+Step 2:
+Add to queue, create a boolean array with visited nodes.
+Everytime there is a not visited node increase the value.
+------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+public class Main
+{
+	public static void main(String[] args) {
+	    Scanner sc = new Scanner(System.in); 
+		int n=sc.nextInt();
+		int [][]mat=new int[n][n];
+		int edge[][]={{0, 1}, {1, 2}, {2, 3}, {4, 5}};
+		ArrayList<List<Integer>>ar=new ArrayList<>();
+		for(int i=0;i<n;i++){
+		    ar.add(new ArrayList<>());
+		}
+		for(int e[]:edge){
+		    ar.get(e[0]).add(e[1]);
+		    ar.get(e[1]).add(e[0]);
+		}
+		boolean visited[]=new boolean[n];
+		int components=0;
+	
+		for(int i=0;i<n;i++){
+		    if(!visited[i]){
+		        components++;
+		        
+		        Queue<Integer>q=new LinkedList<>();
+		        q.add(i);
+		        visited[i]=true;
+		        while(!q.isEmpty()){
+		            int cur=q.poll();
+		            for(int val:ar.get(cur)){
+		                if(!visited[val]){
+		                    visited[val]=true;
+		                    q.add(val);
+		                }
+		            }
+		        }
+		    }
+		}
+		System.out.print(components);
+		
+	}
+}
