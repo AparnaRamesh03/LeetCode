@@ -1,0 +1,69 @@
+https://leetcode.com/problems/number-of-provinces/description/
+
+QUESTION:
+Input: isConnected = [[1,1,0],[1,1,0],[0,0,1]]
+Output: 2
+
+Input: isConnected = [[1,0,0],[0,1,0],[0,0,1]]
+Output: 3
+
+SOLUTION:
+  0 1 2
+0 1 1 0
+1 1 1 0
+2 0 0 1
+----------------------------------------------------------------------------------------------------------------------------------------
+TIME COMPLEXITY:O(n*n)
+SPACE COMPLEXITY: O(n*n)
+
+each row is a city
+city i==j is a self loop.
+city 0 -> city 1 =1 so it is connceted
+city 0 -> city 2 =0 it is not connected
+city 1 -> city 0 =1 it is connected 
+...
+create a map where you store the values
+visited hashset and dfs through the path.
+----------------------------------------------------------------------------------------------------------------------------------------
+CODE:
+class Solution {
+    public int findCircleNum(int[][] isConnected) {
+        HashMap<Integer,List<Integer>>map=new HashMap<>();
+        int r=isConnected.length;
+        int c=isConnected[0].length;
+
+        for(int i=0;i<r;i++){
+            map.putIfAbsent(i,new ArrayList<>());
+            for(int j=0;j<c;j++){
+                if(i==j)continue;
+                map.putIfAbsent(j,new ArrayList<>());
+                if(isConnected[i][j]==1){
+                    map.get(i).add(j);
+                    map.get(j).add(i);
+                }
+            }
+        }
+        int count=0;
+        HashSet<Integer>visited=new HashSet<>();
+        for(int src:map.keySet()){
+            if(!visited.contains(src)){
+                count++;
+                dfs(src,map,visited);
+            }
+        }
+        return count;
+    }
+    public void dfs(int src,HashMap<Integer,List<Integer>>map,HashSet<Integer>visited){
+        if(visited.contains(src))return;
+        visited.add(src);
+        List<Integer>neighbours=map.get(src);
+        for(int val:neighbours){
+            if(!visited.contains(val)){
+                dfs(val,map,visited);
+                visited.add(val);
+            }
+        }
+    }
+}
+
+       
