@@ -1,0 +1,33 @@
+https://leetcode.com/problems/group-anagrams/description/
+
+QUESTION:
+Input: strs = ["eat","tea","tan","ate","nat","bat"]
+
+Output: [["bat"],["nat","tan"],["ate","eat","tea"]]
+SOLUTION:
+TIME COMPLEXITY:O(n* klogk)
+SPACE COMPLEXITY:O(n*k)
+1)create a hasmap that can store values
+2)loopp through the string
+3)sort each string and check if it is in the map.
+4)if yes then just add the value or create a new arraylist.
+
+Things to remember are the string compare,valueof.
+
+CODE:
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        HashMap<String,List<String>>map=new HashMap<>();
+        for(int i=0;i<strs.length;i++){
+            char ch[]=strs[i].toCharArray();
+            Arrays.sort(ch);
+            String val=String.valueOf(ch);
+            if(!map.containsKey(val)){
+                map.put(val,new ArrayList<>());
+            }
+            map.get(val).add(strs[i]);
+        }
+        return new ArrayList<>(map.values());
+
+    }
+}
