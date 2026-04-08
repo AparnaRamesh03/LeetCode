@@ -1,0 +1,38 @@
+https://leetcode.com/problems/contiguous-array/description/
+
+QUESTION:
+Input: nums = [0,1,1,1,1,1,0,0,0]
+Output: 6
+Explanation: [1,1,1,0,0,0] is the longest contiguous subarray with equal number of 0 and 1.
+
+SOLUTION:
+-------------------------------------------------------------------------------------------------------------------------------------------
+TIME COMPLEXITY:O(n)
+SPACE COMPLEXITY:O(n)
+-------------------------------------------------------------------------------------------------------------------------------------------
+1)Create a hashmap(one for rsum and one for index value)
+2)if the value is 1 add else subtract
+3)if map doesnt have the rsum value then that is the max value in the present sequence
+4)but if map contains the rsum value then you have to check which is the max value,the already existing max or i-rsum(index)
+5)return the max
+-------------------------------------------------------------------------------------------------------------------------------------------
+CODE:
+class Solution {
+    public int findMaxLength(int[] nums) {
+        if(nums==null || nums.length<=1)return 0;
+        HashMap<Integer,Integer>map=new HashMap<>();
+        int rsum=0;
+        int max=0;
+        map.put(0,-1);
+        for(int i=0;i<nums.length;i++){
+            if(nums[i]==1)rsum+=1;
+            if(nums[i]==0)rsum-=1;
+            if(!map.containsKey(rsum)){
+                map.put(rsum,i);
+            }else{
+                max=Math.max(max,i-map.get(rsum));
+            }
+        }
+        return max;
+    }
+}
