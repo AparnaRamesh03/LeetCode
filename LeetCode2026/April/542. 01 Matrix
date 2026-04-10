@@ -1,0 +1,62 @@
+https://leetcode.com/problems/01-matrix/description/
+
+
+QUESTION:
+Input: mat = [[0,0,0],[0,1,0],[1,1,1]]
+Output: [[0,0,0],[0,1,0],[1,2,1]]
+
+SOLUTION:
+--------------------------------------------------------------------------------------------------------------------------------------------
+TIME COMPLEXITY:O(m*n)
+SPACE COMPLEXITY:O(m*n)
+--------------------------------------------------------------------------------------------------------------------------------------------
+Intuition:
+  Push all 0s first, then expand like waves to fill distances for 1s.
+Step 1: Identify all starting points.Collect all cells with value 0 into a queue.
+Step 2: Treat all 0s as level 0 (distance = 0). Now expand outward level by level.
+Step 3: Process neighbors level-wiseFor each level:
+          Take all current cells from the queue.
+          Look at their 4 neighbors (up, down, left, right).
+          If a neighbor is 1:
+          Assign it the current distance (stored as negative)Add it to the queue for the next level.
+Step 4: After processing one full layer of BFS: Increase distance (dist++)
+Step 5: Once a 1 is converted to a negative value:It’s no longer equal to 1. So it won’t be processed again
+--------------------------------------------------------------------------------------------------------------------------------------------
+CODE:
+
+  class Solution {
+    public int[][] updateMatrix(int[][] mat) {
+        Queue<int[]>q=new LinkedList<>();
+        for(int i=0;i<mat.length;i++){
+            for(int j=0;j<mat[0].length;j++){
+                if(mat[i][j]==0){
+                    q.add(new int[]{i,j});
+                }
+            }
+        }
+        int dist=1;
+        int dirs[][]={{0,1},{1,0},{0,-1},{-1,0}};
+        while(!q.isEmpty()){
+            int size=q.size();
+            for(int i=0;i<size;i++){
+                int cur[]=q.poll();
+                for(int dir[]:dirs){
+                    int r=cur[0]+dir[0];
+                    int c=cur[1]+dir[1];
+                    if(r<mat.length && r>=0 && c<mat[0].length && c>=0 && mat[r][c]==1){
+                        mat[r][c]=-dist;
+                        q.add(new int[]{r,c});
+                    } 
+                    
+                }
+            }
+            dist++;
+        }
+        for(int i=0;i<mat.length;i++){
+            for(int j=0;j<mat[0].length;j++){
+                mat[i][j]=-1*mat[i][j];
+            }
+        }
+        return mat;
+    }
+}
