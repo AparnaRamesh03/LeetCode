@@ -10,11 +10,22 @@ SOLUTION:
 TIME COMPLEXITY:O(n)
 SPACE COMPLEXITY:O(n)
 -------------------------------------------------------------------------------------------------------------------------------------------
-1)Create a hashmap(one for rsum and one for index value)
-2)if the value is 1 add else subtract
-3)if map doesnt have the rsum value then that is the max value in the present sequence
-4)but if map contains the rsum value then you have to check which is the max value,the already existing max or i-rsum(index)
-5)return the max
+1)use a map to store the rsum values
+2)store rsum with index.
+3)
+Initialize:
+1) map.put(0, -1) → handles case when subarray from index 0 has equal 0s & 1s
+2) Traverse array:
+    If 1 → rsum += 1
+    If 0 → rsum -= 1
+3) For each rsum:
+    If not seen before → store index
+    If seen before:
+4)That means subarray between previous index and current index has sum = 0
+    Length = i - previousIndex
+    Update max
+
+If the same prefix sum appears again, it means the elements in between balanced out (equal 0s and 1s).
 -------------------------------------------------------------------------------------------------------------------------------------------
 CODE:
 class Solution {
@@ -36,3 +47,4 @@ class Solution {
         return max;
     }
 }
+
