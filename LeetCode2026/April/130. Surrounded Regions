@@ -1,0 +1,60 @@
+https://leetcode.com/problems/surrounded-regions/description/
+
+
+QUESTION:
+Input: board = [["X","X","X","X"],
+                ["X","O","O","X"],
+                ["X","X","O","X"],
+                ["X","O","X","X"]]
+
+Output:         [["X","X","X","X"],
+                 ["X","X","X","X"],
+                 ["X","X","X","X"],
+                 ["X","O","X","X"]]
+
+
+SOLUTION
+-----------------------------------------------------------------------------------------------------------------------------
+TIME COMPLEXITY: O(m*n)
+SPACE COMPLEXITY: O(m*n)
+You can solve using dfs or bfs.
+-----------------------------------------------------------------------------------------------------------------------------
+1)check all the borders. and move in dfs.
+2)if value is X move on else mark it as  'E'
+3)in the main function if the value is 'O' then just make it 'X' else if value is 'E' then make it 'O'
+-----------------------------------------------------------------------------------------------------------------------------
+
+CODE:
+class Solution {
+    public void solve(char[][] board) {
+        int rowLength=board.length;
+        int colLength=board[0].length;
+        for(int i=0;i<rowLength;i++){
+            dfs(board,i,0);
+            dfs(board,i,colLength-1);
+        }
+        for(int i=0;i<colLength-1;i++){
+            dfs(board,0,i);
+            dfs(board,rowLength-1,i);
+        }
+
+        for(int i=0;i<rowLength;i++){
+            for(int j=0;j<colLength;j++){
+                if(board[i][j]=='O')board[i][j]='X';
+                else if(board[i][j]== 'E')board[i][j]='O';
+            }
+        }
+
+
+    }
+    private void dfs(char[][] board,int row,int col){
+        if(row<0 || col<0 || row>=board.length || col>=board[0].length)return;
+        if(board[row][col]!='O')return;
+
+        board[row][col]='E';
+        dfs(board,row+1,col);
+        dfs(board,row-1,col);
+        dfs(board,row,col+1);
+        dfs(board,row,col-1);
+    }
+}
