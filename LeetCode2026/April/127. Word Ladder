@@ -64,3 +64,124 @@ class Solution {
       return 0;
     }
 }
+----------------------------------------------------------------------------------------------------------
+There is an OPTIMAL WAY to do this.
+BIDIRECTIONAL BFS:
+Instead of hit->hot->dot->dog->cog
+You can do
+fwd: hit->hot->dot
+bwd: cog->dog->dot
+----------------------------------------------------------------------------------------------------------
+Input:
+beginWord = "hit"
+endWord   = "cog"
+wordList  = ["hot","dot","dog","lot","log","cog"]
+
+Initial:
+beginSet = { "hit" }
+endSet   = { "cog" }
+set      = { hot, dot, dog, lot, log, cog }
+steps = 1
+
+Iteration 1:
+Expand beginSet = { "hit" }
+hit → hot
+nextSet = { "hot" }
+beginSet = { "hot" }
+steps = 2
+
+Iteration 2:
+Expand beginSet = { "hot" }
+hot → dot, lot
+nextSet = { "dot", "lot" }
+beginSet = { "dot", "lot" }
+steps = 3
+
+Iteration 3:
+beginSet size > endSet size → swap
+beginSet = { "cog" }
+endSet   = { "dot", "lot" }
+
+Expand beginSet:
+cog → dog, log
+nextSet = { "dog", "log" }
+beginSet = { "dog", "log" }
+steps = 4
+
+Iteration 4:
+Expand beginSet = { "dog", "log" }
+
+dog → dot (found in endSet)
+
+Return steps + 1 = 5
+
+Output:
+5
+
+Path:
+hit → hot → dot → dog → cog
+----------------------------------------------------------------------------------------------------------
+TIME  COMPLEXITY: O((N/2)*L)
+SPACE COMPLEXITY: O((N/2)*L)
+CODE:
+class Solution {
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        
+        Set<String> set = new HashSet<>(wordList);
+        if (!set.contains(endWord)) return 0;
+
+        Set<String> beginSet = new HashSet<>();
+        Set<String> endSet = new HashSet<>();
+
+        beginSet.add(beginWord);
+        endSet.add(endWord);
+
+        int steps = 1;
+
+        while (!beginSet.isEmpty() && !endSet.isEmpty()) {
+
+            // Always expand the smaller set
+            //It swaps the two sets so that:
+            //beginSet is always the smaller set
+            //endSet is the larger set
+            if (beginSet.size() > endSet.size()) {
+                Set<String> temp = beginSet;
+                beginSet = endSet;
+                endSet = temp;
+            }
+
+            Set<String> nextSet = new HashSet<>();
+
+            for (String word : beginSet) {
+
+                char[] arr = word.toCharArray();
+
+                for (int i = 0; i < arr.length; i++) {
+                    char original = arr[i];
+
+                    for (char ch = 'a'; ch <= 'z'; ch++) {
+                        arr[i] = ch;
+                        String newWord = new String(arr);
+
+                        // If found in opposite set → done
+                        if (endSet.contains(newWord)) {
+                            return steps + 1;
+                        }
+
+                        if (set.contains(newWord)) {
+                            nextSet.add(newWord);
+                            set.remove(newWord); // mark visited
+                        }
+                    }
+
+                    arr[i] = original; // restore
+                }
+            }
+
+            beginSet = nextSet;
+            steps++;
+        }
+
+        return 0;
+    }
+}
