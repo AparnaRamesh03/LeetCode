@@ -1,0 +1,66 @@
+https://leetcode.com/problems/word-ladder/description/
+
+
+QUESTION:
+Input: beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog","lot","log","cog"]
+Output: 5
+Explanation: One shortest transformation sequence is "hit" -> "hot" -> "dot" -> "dog" -> cog", which is 5 words long.
+SOLUTION:
+------------------------------------------------------------------------------------------------------------
+TIME  COMPLEXITY:O(N*L) where n is number of words in the list and L is length of each word.
+SPACE COMPLEXITY:O(N*L)
+------------------------------------------------------------------------------------------------------------
+Step 1: Create a Pair to store (word, steps) and initialize queue with (beginWord, 1)
+Step 2: Create a HashSet and store all words from the wordList
+Step 3: Remove beginWord from the set (to mark it visited)
+Step 4: While the queue is not empty, pop the front element and get word and steps
+Step 5: If the word is equal to endWord, return the steps
+Step 6: Traverse each character index of the word
+Step 7: For each index, try replacing it with characters from 'a' to 'z'
+Step 8: Form a new word after replacement
+Step 9: If the new word exists in the set, add it to the queue with steps + 1
+Step 10: Remove that word from the set (mark as visited)
+Step 11: Restore the original character before moving to next position
+Step 12: If queue becomes empty and endWord is not found, return 0
+
+------------------------------------------------------------------------------------------------------------
+CODE:
+class Solution {
+    class Pair {
+    String word;
+    int steps;
+
+    Pair(String word, int steps) {
+        this.word = word;
+        this.steps = steps;
+    }
+}
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        Queue<Pair>q=new LinkedList<>();
+        q.add(new Pair(beginWord,1));
+        Set<String>set=new HashSet<>(wordList);
+        set.remove(beginWord);
+        while(!q.isEmpty()){
+            Pair p = q.peek();
+            String word = p.word;
+            int step = p.steps;
+            q.poll();
+            if(word.equals(endWord))return step;
+            for(int i=0;i<word.length();i++){
+                char arr[]=word.toCharArray();
+                char original=arr[i];
+                for(char ch='a';ch<='z';ch++){
+                    arr[i]=ch;
+                    String newWord=new String(arr);
+                    if(set.contains(newWord)){
+                        set.remove(newWord);
+                        q.add(new Pair(newWord,step+1));
+                    }
+                }
+                arr[i]=original;
+            }
+        }
+
+      return 0;
+    }
+}
