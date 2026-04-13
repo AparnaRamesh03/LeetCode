@@ -1,0 +1,39 @@
+https://leetcode.com/problems/delete-and-earn/description/
+
+QUESTION:
+Input: nums = [3,4,2]
+Output: 6
+
+Input: nums = [2,2,3,3,3,4]
+Output: 9
+SOLUTION:
+-------------------------------------------------------------------------------------------------------------------------------
+TIME  COMPLEXITY:O(N)
+SPACE COMPLEXITY:O(N)
+-------------------------------------------------------------------------------------------------------------------------------
+Step 1: create a dp array
+Step 2: loop through adding up if the elements are same
+for example: [2 2 3 3 3 4] the dp array will be [2 6 0] 
+              0 2 0 3 6 0
+Step 4: Create a skip and take element.
+Step 5: if you skip(take max of skip or take)
+        if you take then add prev skip value and the current dp[i] value
+Step 6: parse through.
+-------------------------------------------------------------------------------------------------------------------------------
+CODE:
+class Solution {
+    public int deleteAndEarn(int[] nums) {
+        int []dp=new int[10001];
+        for(int num:nums){
+            dp[num]+=num;
+        }
+        int skip=0,take=0;
+        for(int i=0;i<dp.length;i++){
+            int c_skip=Math.max(skip,take);
+            int c_take=skip+dp[i];
+            skip=c_skip;
+            take=c_take;
+        }
+        return Math.max(skip,take);
+    }
+}
