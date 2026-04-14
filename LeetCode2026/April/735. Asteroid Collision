@@ -1,0 +1,39 @@
+https://leetcode.com/problems/asteroid-collision/description/
+
+
+QUESTION:
+SOLUTION:
+----------------------------------------------------------------------------------------------------------------------------------------------
+TIME  COMPLEXITY:O(n)
+SPACE COMPLEXITY:O(n)
+----------------------------------------------------------------------------------------------------------------------------------------------
+Step 1: First identify that it is a stack problem
+Step 2: Loop through the values and push any value that is >0
+Step 3: If not then there are three conditions you should look into.
+          -> If the stack is not empty and the top element in the stack is > 0 and the top element is < the -(-ve element) 5< -(-6)
+          -> Loop through until you keep finding a positive value that is lesser than the current negative value.
+          -> Once the while loop is done, check if the stack is empty or the top element is <0 push the current element
+          ->if the peek element is == the number then pop 
+Step 4: Loop through and create the array.
+          
+----------------------------------------------------------------------------------------------------------------------------------------------
+CODE:
+class Solution {
+    public int[] asteroidCollision(int[] asteroids) {
+        Stack<Integer>st=new Stack<>();
+        for(int num:asteroids){
+            if(num>0)st.push(num);
+            else {
+                while(!st.isEmpty() && st.peek()>0 && st.peek()<-num)st.pop();
+                if(st.isEmpty() || st.peek()<0)st.push(num);
+                if(st.peek()==-num)st.pop();
+            }
+        }
+        int res[]=new int[st.size()];
+        int size=st.size()-1;
+        while(!st.isEmpty()){
+            res[size--]=st.pop();
+        }
+        return res;
+    }
+}
