@@ -1,0 +1,138 @@
+https://takeuforward.org/data-structure/detect-cycle-in-a-directed-graph-using-dfs-g-19
+
+QUESTION:
+Input: N = 10, E = 11
+Output: true
+Explanation: 8->9->10 is a cycle.
+ 1--->2--->3--->4-|
+      ^    |      |
+      |    |>7--->5-->6
+      |     
+      8----->9<
+      |>__10__>|
+SOLUTION:
+------------------------------------------------------------------------------------------------------------------------------------------
+TIME  COMPLEXITY: O(V+E)+O(V)
+SPACE COMPLEXITY: O(2N)
+------------------------------------------------------------------------------------------------------------------------------------------
+Step 1: Create two integer arrays one for visited and the other called pathvisited
+Step 2: If vis[i] element is 0 then create a dfs loop and loop through.
+                         1  2  3  4  5  6  7  8  9  10
+          Visited        0  0  0  0  0  0  0  0  0  0    
+          Path Visited   0  0  0  0  0  0  0  0  0  0
+                   1)    1  0  0  0  0  0  0  0  0  0
+                         1  0  0  0  0  0  0  0  0  0
+
+                    2)   1  1  0  0  0  0  0  0  0  0
+                         1  1  0  0  0  0  0  0  0  0
+
+                    3)   1  1  1  0  0  0  0  0  0  0
+                         1  1  1  0  0  0  0  0  0  0
+
+                    4)   1  1  1  1  0  0  0  0  0  0 since dfs go through 5 & 6 then 7
+                         1  1  1  1  0  0  0  0  0  0
+
+                    5)   1  1  1  1  1  1  0  0  0  0
+                         1  1  1  1  1  1  0  0  0  0
+
+                    6)   1  1  1  1  1  1  0  0  0  0
+                         1  1  1  1  1  1  0  0  0  0
+
+                    7)   1  1  1  1  1  1  0  0  0  0
+                         1  1  1  1  1  0  0  0  0  0
+
+                    
+                    8)   1  1  1  1  1  1  0  0  0  0
+                         1  1  1  1  0  0  0  0  0  0
+
+                    9)   1  1  1  1  1  1  0  0  0  0
+                         1  1  1  0  0  0  0  0  0  0
+
+                    10)  1  1  1  1  1  1  0  0  0  0
+                         1  1  1  0  0  1  0  0  0  0
+
+                    11)   1  1  1  1  1  1  0  0  0  0
+                          1  1  1  0  0  0  0  0  0  0
+
+                    12)  1  1  1  1  1  1  0  0  0  0
+                         1  1  0  0  0  0  0  0  0  0
+
+                    13)  1  1  1  1  1  1  0  0  0  0
+                         1  0  0  0  0  0  0  0  0  0
+
+                    14)  1  1  1  1  1  1  0  0  0  0
+                         0  0  0  0  0  0  0  0  0  0
+
+                    15)  1  1  1  1  1  1  0  0  0  0
+                         0  0  0  0  0  0  0  1  0  0
+
+                    16)  1  1  1  1  1  1  0  0  0  0
+                         0  0  0  0  0  0  0  1  1  0
+
+                    17)  1  1  1  1  1  1  0  0  0  0
+                         0  0  0  0  0  0  0  1  1  1 again hitting on 8
+  
+
+------------------------------------------------------------------------------------------------------------------------------------------
+CODE:
+import java.util.*;
+
+public class Main {
+
+    static boolean dfsCycle(int i, int pathVis[], int vis[], ArrayList<ArrayList<Integer>> adj) {
+        vis[i] = 1;
+        pathVis[i] = 1;
+
+        for (int it : adj.get(i)) {
+            if (vis[it] == 0) {
+                if (dfsCycle(it, pathVis, vis, adj)) return true;
+            } 
+            else if (pathVis[it] == 1) {
+                return true;
+            }
+        }
+
+        pathVis[i] = 0;
+        return false;
+    }
+
+    static boolean isCycle(int V, ArrayList<ArrayList<Integer>> adj) {
+        int vis[] = new int[V];
+        int pathVis[] = new int[V];
+
+        for (int i = 0; i < V; i++) {
+            if (vis[i] == 0) {
+                if (dfsCycle(i, pathVis, vis, adj)) return true;
+            }
+        }
+        return false;
+    }
+
+    public static void main(String[] args) {
+        int V = 11;
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+
+        for (int i = 0; i < V; i++) {
+            adj.add(new ArrayList<>());
+        }
+
+        adj.get(1).add(2);
+        adj.get(2).add(3);
+        adj.get(3).add(4);
+        adj.get(3).add(7);
+        adj.get(4).add(5);
+        adj.get(5).add(6);
+        adj.get(7).add(5);
+
+        adj.get(8).add(9);
+        adj.get(9).add(10);
+        adj.get(10).add(8); // cycle here
+
+        boolean ans = isCycle(V, adj);
+
+        if (ans)
+            System.out.println("True");
+        else
+            System.out.println("False");
+    }
+}
