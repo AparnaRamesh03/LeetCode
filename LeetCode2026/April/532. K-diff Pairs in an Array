@@ -1,0 +1,33 @@
+https://leetcode.com/problems/k-diff-pairs-in-an-array/description/
+
+QUESTION:
+Input: nums = [3,1,4,1,5], k = 2
+Output: 2
+SOLUTION:
+---------------------------------------------------------------------------------------------------------------------------------------
+TIME  COMPLEXITY:O(n)
+SPACE COMPLEXITY:O(n)
+---------------------------------------------------------------------------------------------------------------------------------------
+Create 2 hashsets
+1 hashset to store whenever you find eaither num-k or num+k
+The other to just add the unique pairs. 
+---------------------------------------------------------------------------------------------------------------------------------------
+CODE:
+class Solution {
+    public int findPairs(int[] nums, int k) {
+       if(k<0)return 0;
+        HashSet<Integer> seen = new HashSet<>();
+        HashSet<Integer> uniquePairs = new HashSet<>();
+
+        for (int num : nums) {
+            if (seen.contains(num - k)) {
+                uniquePairs.add(num - k);
+            }
+            if (seen.contains(num + k)) {
+                uniquePairs.add(num);
+            }
+            seen.add(num);
+        }
+
+        return uniquePairs.size();    }
+}
