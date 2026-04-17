@@ -1,0 +1,58 @@
+https://leetcode.com/problems/game-of-life/description/
+
+
+QUESTION:
+Input: board = [[0,1,0],[0,0,1],[1,1,1],[0,0,0]]
+Output: [[0,0,0],[1,0,1],[0,1,1],[0,1,0]]
+SOLUTION:
+-------------------------------------------------------------------------------------------------------------------------------------
+TIME  COMPLEXITY:O(m*n)
+SPACE COMPLEXITY:O(m*n)
+-------------------------------------------------------------------------------------------------------------------------------------
+if board[i][j]==1 & the count of live values are <2 or greater than 3 then board[i][j]=-1
+if(board[i][j]==0 & count=3 then board[i][j]=2
+
+-------------------------------------------------------------------------------------------------------------------------------------
+CODE:
+class Solution {
+    public void gameOfLife(int[][] board) {
+        int n=board.length;
+        int m=board[0].length;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                int count=check(board,i,j);
+               if(board[i][j]==1 && (count<2 || count>3)){
+                    board[i][j]=-1;
+                }
+                if(board[i][j]==0 && count==3)
+                {
+                    board[i][j]=2;
+                }
+            }
+        }
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(board[i][j]==-1)
+                {
+                    board[i][j]=0;
+                }
+                if(board[i][j]==2)
+                {
+                    board[i][j]=1;
+                }
+            }
+        }
+    }
+    public int check(int [][]board,int i,int j){
+        int count=0;
+        int dirs[][]={{0,-1},{0,1},{1,0},{-1,0},{1,1},{1,-1},{-1,1},{-1,-1}};
+        for(int dir[]:dirs){
+            int r=i+dir[0];
+            int c=j+dir[1];
+            if(r>=0 && r<board.length && c>=0 && c<board[0].length ){
+                if(board[r][c]==1 || board[r][c]==-1)count++;
+            }
+        }
+        return count;
+    }
+}
