@@ -1,0 +1,73 @@
+https://leetcode.com/problems/reorder-list/description/
+
+QUESTION:
+Input: head = [1,2,3,4,5]
+Output: [1,5,2,4,3]
+SOLUTION:
+-----------------------------------------------------------------------------------------------------------------------------------
+TIME  COMPLEXITY:O(n)
+SPACE COMPLEXITY:O(1)
+-----------------------------------------------------------------------------------------------------------------------------------
+You can use extra space like queue to do it.
+But SLOW AND FAST POINTER can be used for a better solution. as it gives the midpoint.
+
+1->2->3->4->5
+s=1  s=2  s=3
+f=1  f=3  f=4
+reverse(s.next)
+5->4
+1-2->3
+now 1=>5->2->4->3
+
+[temp = slow.next = 2
+slow.next = fast → 1 → 5
+fast = fast.next → 4
+slow.next.next = temp → 5 → 2
+slow = temp → 2]
+-----------------------------------------------------------------------------------------------------------------------------------
+CODE:
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public void reorderList(ListNode head) {
+        if(head==null || head.next==null)return;
+        ListNode slow=head;
+        ListNode fast=head;
+        while(fast.next!=null && fast.next.next!=null){
+            slow=slow.next;
+            fast=fast.next.next;
+        }
+        fast=reverse(slow.next);
+        slow.next=null;
+        slow=head;
+        ListNode temp;
+        while(slow!=null && fast!=null){
+            temp=slow.next;
+            slow.next=fast;
+            fast=fast.next;
+            slow.next.next=temp;
+            slow=temp;
+        }
+    }
+    public ListNode reverse(ListNode node){
+       ListNode prev=null;
+        ListNode curr=node;
+        ListNode fast=node.next;
+        while(fast!=null){
+            curr.next=prev;
+            prev=curr;
+            curr=fast;
+            fast=fast.next;
+        }
+        curr.next=prev;
+        return curr;
+    }
+}
