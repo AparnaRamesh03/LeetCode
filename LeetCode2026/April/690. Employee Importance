@@ -1,0 +1,43 @@
+https://leetcode.com/problems/employee-importance/description/
+
+QUESTION:
+Input: employees = [[1,5,[2,3]],[2,3,[]],[3,3,[]]], id = 1
+Output: 11
+SOLUTION:
+--------------------------------------------------------------------------------------------------------------------------------------
+TIME  COMPLEXITY:O(n)
+SPACE COMPLEXITY:O(n)
+--------------------------------------------------------------------------------------------------------------------------------------
+Create a Hashmap that stores the id and the whole data of each Employee
+then its a DFS approach
+you check with the id and add the importance
+check the subordinates and continue the dfs.
+--------------------------------------------------------------------------------------------------------------------------------------
+CODE:
+/*
+// Definition for Employee.
+class Employee {
+    public int id;
+    public int importance;
+    public List<Integer> subordinates;
+};
+*/
+
+class Solution {
+    int result=0;
+    public int getImportance(List<Employee> employees, int id) {
+        HashMap<Integer,Employee>map=new HashMap<>();
+        for(Employee e: employees){
+            map.put(e.id,e);
+        }
+        dfs(map,id);
+        return result;
+    }
+    public void dfs(HashMap<Integer,Employee>map,int id){
+       Employee e= map.get(id);
+       result+=e.importance;
+       for(int subId:e.subordinates){
+        dfs(map,subId);
+       }
+    }
+}
