@@ -1,0 +1,58 @@
+https://leetcode.com/problems/decode-string/description/
+
+QUESTION:
+Input: s = "3[a]2[bc]"
+Output: "aaabcbc"
+
+Input: s = "3[a2[c]]"
+Output: "accaccacc"
+
+SOLUTION:
+---------------------------------------------------------------------------------------------------------------------------------------
+TIME  COMPLEXITY:O(n) where n is total output size
+SPACE COMPLEXITY:O(n)
+---------------------------------------------------------------------------------------------------------------------------------------
+A number stack → to store repeat counts
+A string stack → to store previous string states
+curs → current working string
+curn → current number being built
+------------
+MAIN IDEA:
+------------
+Number → build the repeat count
+[ → save current number + string, reset both
+Letters → add to current string
+] → repeat current string and attach it to previous one
+---------------------------------------------------------------------------------------------------------------------------------------
+CODE:
+class Solution {
+    public String decodeString(String s) {
+        Stack<Integer>num=new Stack<>();
+        Stack<String>st=new Stack<>();
+        String curS="";
+        int curN=0;
+        char a[]=s.toCharArray();
+
+        for(char ch:a){
+            if(Character.isDigit(ch)){
+                curN=curN*10+ch-'0';
+            }else if(ch=='['){
+                num.push(curN);
+                st.push(curS);
+                curS="";
+                curN=0;
+            }else if(ch==']'){
+                StringBuilder sb=new StringBuilder();
+                int time=num.pop();
+                for(int i=0;i<time;i++){
+                    sb.append(curS);
+                }
+                System.out.println(sb);
+                curS=st.pop()+sb;
+            }else{
+                curS+=ch;
+            }
+        }
+        return curS;
+    }
+}
