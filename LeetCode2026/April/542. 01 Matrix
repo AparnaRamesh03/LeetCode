@@ -11,6 +11,11 @@ TIME COMPLEXITY:O(m*n)
 SPACE COMPLEXITY:O(m*n)
 --------------------------------------------------------------------------------------------------------------------------------------------
 Intuition:
+The intuition is that if you first collect 1 then you are looking for something at each step.
+But by saving 0's and going forward, you are just finding distance at each point.
+------
+MAIN
+------
   Push all 0s first, then expand like waves to fill distances for 1s.
 Step 1: Identify all starting points.Collect all cells with value 0 into a queue.
 Step 2: Treat all 0s as level 0 (distance = 0). Now expand outward level by level.
