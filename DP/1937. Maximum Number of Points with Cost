@@ -1,0 +1,46 @@
+https://leetcode.com/problems/maximum-number-of-points-with-cost/description/
+
+
+QUESTION:
+Input: points = [[1,2,3],[1,5,1],[3,1,1]]
+Output: 9
+Explanation:
+The blue cells denote the optimal cells to pick, which have coordinates (0, 2), (1, 1), and (2, 0).
+You add 3 + 5 + 3 = 11 to your score.
+However, you must subtract abs(2 - 1) + abs(1 - 0) = 2 from your score.
+Your final score is 11 - 2 = 9.
+SOLUTION:
+TIME  COMPLEXITY:O(m*n^2)
+SPACE COMPLEXITY:O(m*n)
+CODE:
+First Solution(not optimal)
+class Solution {
+    public long maxPoints(int[][] points) {
+        int m = points.length;
+        int n = points[0].length;
+        long dp[][] = new long[m][n];
+        // first row
+        for (int i = 0; i < n; i++) {
+            dp[0][i] = points[0][i];
+        }
+        // remaining rows
+        for (int i = 1; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                long best = 0;
+                // check every previous column
+                for (int k = 0; k < n; k++) {
+                    best = Math.max(
+                        best,
+                        dp[i - 1][k] - Math.abs(k - j)
+                    );
+                }
+                dp[i][j] = points[i][j] + best;
+            }
+        }
+        long max = 0;
+        for (int i = 0; i < n; i++) {
+            max = Math.max(max, dp[m - 1][i]);
+        }
+        return max;
+    }
+}
