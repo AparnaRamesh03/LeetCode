@@ -1,0 +1,166 @@
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+QUESTION:
+https://leetcode.com/problems/set-matrix-zeroes/description/
+
+Input: matrix = [[1,1,1],[1,0,1],[1,1,1]]
+Output: [[1,0,1],[0,0,0],[1,0,1]]
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SOLUTION:
+The Brute force:
+Brute force was to use HashSet/HashMap
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+2)Solution (Queue)
+  -> Check for all the 0 values in the array and insert the ith and jth index.
+  -> use the int[] value to make the ith row and jth column 0
+  -> [Solution would take additional array as space for queue]
+TIME  COMPLEXITY: O(R*C(R*C))
+SPACE CPMPLEXITY: O(R*C)
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+3)Solution (Optimal)
+  -> check for 0 in the first row and first column and mark them as true if available.
+  -> Check for 0 in the rest of the values from i=1 & j=1.
+  -> Whichever i and j element is 0 matrix[i][0]=0 & matrix[0][j]=0
+  -> now ith row and jth column is entirely made 0
+  -> finaly if first row and firstcolumn has true values. make them 0 as well to avoid crossover this was done.
+TIME  COMPLEXITY: O(R*C))
+SPACE CPMPLEXITY: O(1)
+Eg:
+1 1 0 1
+1 1 1 1
+1 0 1 1
+1 1 1 1
+
+First row=True
+first col=false
+
+matrix[0][2]=0
+matrix[2][1]=0 
+for matrix [2][1] we have to see cause matrix [0][2] is first row
+i=2
+j=1
+
+matrix[2][0]=0
+matrix[0][1]=0
+1 0 0 1
+1 1 1 1
+0 0 1 1
+1 1 1 1
+If outside the firstrow and first col any value is 0.Mark that row and col 0
+[2][0] is 2nd row 
+[0][1] is 1st col
+Here,Other than [2][1] all the 0's are in the border.So,
+[2][1]=0 [2][2]=0 [2][3]=0
+1 0 0 1
+1 1 1 1
+0 0 0 0
+1 1 1 1
+so 1st col is also 0
+1 0 0 1
+1 0 1 1
+0 0 0 0
+1 1 1 1
+
+Now first row is true so
+0 0 0 0
+1 0 1 1
+0 0 0 0
+1 1 1 1
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CODE:
+QUEUE
+class Solution {
+    public void setZeroes(int[][] matrix) {
+        int n=matrix.length;
+        int m=matrix[0].length;
+        HashMap<Integer,Integer>map=new HashMap<>();
+        Queue<int[]>q=new LinkedList<>();
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(matrix[i][j]==0)q.add(new int[]{i,j});
+            }
+        }
+        while(!q.isEmpty()){
+            int curr[]=q.poll();
+            zero(matrix,curr[0],curr[1]);
+
+        }
+    }
+    public void zero(int[][] matrix,int k,int l){
+        for(int i=0;i<matrix.length;i++){
+            if(matrix[i][l]!=0)matrix[i][l]=0;
+        }
+        for(int i=0;i<matrix[0].length;i++){
+            if(matrix[k][i]!=0)matrix[k][i]=0;
+        }
+    }
+}
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Optimal:
+class Solution {
+    public void setZeroes(int[][] matrix) {
+
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+
+        boolean firstRowZero = false;
+        boolean firstColZero = false;
+
+        for(int j = 0; j < cols; j++) {
+            if(matrix[0][j] == 0) {
+                firstRowZero = true;
+                break;
+            }
+        }
+        for(int i = 0; i < rows; i++) {
+            if(matrix[i][0] == 0) {
+                firstColZero = true;
+                break;
+            }
+        }
+
+        for(int i = 1; i < rows; i++) {
+            for(int j = 1; j < cols; j++) {
+
+                if(matrix[i][j] == 0) {
+
+                    matrix[i][0] = 0; // row marker
+
+                    matrix[0][j] = 0; // col marker
+                }
+            }
+        }
+
+        for(int i = 1; i < rows; i++) {
+
+            if(matrix[i][0] == 0) {
+
+                for(int j = 1; j < cols; j++) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+
+        for(int j = 1; j < cols; j++) {
+
+            if(matrix[0][j] == 0) {
+
+                for(int i = 1; i < rows; i++) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+
+        if(firstRowZero) {
+
+            for(int j = 0; j < cols; j++) {
+                matrix[0][j] = 0;
+            }
+        }
+        if(firstColZero) {
+
+            for(int i = 0; i < rows; i++) {
+                matrix[i][0] = 0;
+            }
+        }
+    }
+}
