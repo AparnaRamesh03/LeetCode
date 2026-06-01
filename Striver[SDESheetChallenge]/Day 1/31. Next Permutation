@@ -1,0 +1,60 @@
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+QUESTION:
+https://leetcode.com/problems/next-permutation/description/
+
+Input: nums = [1,3,2]
+Output: [2,1,3]
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SOLUTION:
+The Brute force:
+ -> you recursively call all the values
+ [1,2,3], [1,3,2], [2, 1, 3], [2, 3, 1], [3,1,2], [3,2,1] 
+-> and then see what is the next value in the whole set
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+2)Solution (Optimal)
+
+[1 3 2] 
+always move from right i=nums.length-2 and j=nums.length-1
+-> you have to find i such that i < i+1
+-> with arr[i] value should be greater than the arr[j] value
+-> reverse
+EG:
+2 1 5 4 3 0 0
+5 4 3 0 0 => is already the biggest possible value.
+1 / 5 is where the ith iteration breaks.
+i=1
+j=6th index.. keep iterating until you find a value greater than nums[i]
+The first element greater than 1 from the right is automatically the smallest greater element.
+1<0 no
+1<0 no
+1<3 yes
+2 3 5 4 1 0 0 now reverse cause 5 4 1 0 0 is still descending order which means there are better values in ascending.
+2 3 0 0 1 4 5
+TIME  COMPLEXITY: O(n)
+SPACE COMPLEXITY: O(1)
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CODE:class Solution {
+    public void nextPermutation(int[] nums) {
+        if(nums==null || nums.length==0)return;
+        int i=nums.length-2;
+        while(i>=0 && nums[i]>=nums[i+1])i--;
+        int j=nums.length-1;
+        if(i>=0){
+            while(nums[i]>=nums[j])j--;
+            swap(nums,i,j);
+        }
+        reverse(nums,i+1,nums.length-1);
+    }
+    public void swap(int nums[],int i,int j){
+        int temp=nums[i];
+        nums[i]=nums[j];
+        nums[j]=temp;
+    }
+    public void reverse(int[] nums,int i,int j){
+        while(i<j){
+            swap(nums,i,j);
+            i++;
+            j--;
+        }
+    }
+}
