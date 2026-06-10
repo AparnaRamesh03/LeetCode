@@ -1,0 +1,30 @@
+https://leetcode.com/problems/maximum-subarray/description/
+Kadane's Algorithm : 
+It is basically a type of DP where you save the global sum and local sum at each point.
+The key identifiers for this :
+-> Contiguous array ->Optimization(max possible,min possible or the largest product) ->negative numbers
+
+QUESTION:
+Input: nums = [-2,1,-3,4,-1,2,1,-5,4]
+Output: 6
+Explanation: The subarray [4,-1,2,1] has the largest sum 6.
+
+SOLUTION:
+-2 1 -3 4 -1 2 1 -5 4
+localsum       globalsum
+   -2              -2  
+-2+1=-1/1           1
+1-3=-2/-3           1
+-2+4=2/4            4
+....
+CODE:
+class Solution {
+    public int maxSubArray(int[] nums) {
+        int localsum=nums[0],globalsum=nums[0];
+        for(int i=1;i<nums.length;i++){
+            localsum=Math.max(localsum+nums[i],nums[i]);
+            globalsum=Math.max(localsum,globalsum);
+        }
+        return globalsum;
+    }
+}
