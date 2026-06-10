@@ -1,0 +1,36 @@
+https://leetcode.com/problems/best-time-to-buy-and-sell-stock/description/
+
+QUESTION:
+Input: prices = [7,1,5,3,6,4]
+Output: 5
+SOLUTION:
+A type of kadanes algortihm , DP Problem
+        curmin         curmax
+      MAXVALUE      MINVALUE
+     7<MAXVALUE=7     7-7>MINVALUE=0
+      1<7=1          1-1>0=0
+      5!<1=1          5-1>0=4
+      3!<1=1          3-1!>4=4
+      6!<1=1          6-1>4=5
+      4!<1=1          4-1=3
+
+value is 5
+
+TIME  COMPLEXITY:O(N)  
+SPACE COMPLEXITY:O(1)
+CODE:
+class Solution {
+    public int maxProfit(int[] prices) {
+        int currMin=Integer.MAX_VALUE;
+        int currMax=Integer.MIN_VALUE;
+        for(int i=0;i<prices.length;i++){
+            if(prices[i]<currMin){
+                currMin=prices[i];
+            }
+            if(prices[i]-currMin> currMax){
+                currMax=prices[i]-currMin;
+            }
+        }
+        return currMax;
+    }
+}
